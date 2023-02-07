@@ -3,6 +3,7 @@ import functools
 from IPython.display import display, clear_output
 from ipywidgets import Button, Dropdown, HTML, HBox, IntSlider, FloatSlider, Textarea, Output
 
+
 def annotate(examples,
              options=None,
              shuffle=False,
@@ -62,6 +63,8 @@ def annotate(examples,
     def previous(btn):
         nonlocal current_index
         current_index -= 2
+
+        print(current_index)
         annotations.pop()
         show_next()
 
@@ -79,7 +82,7 @@ def annotate(examples,
         raise Exception('Invalid options')
 
     buttons = []
-    
+
     if task_type == 'classification':
         use_dropdown = len(options) > 5
 
@@ -87,16 +90,20 @@ def annotate(examples,
             dd = Dropdown(options=options)
             display(dd)
             btn = Button(description='submit')
+
             def on_click(btn):
                 add_annotation(dd.value)
+
             btn.on_click(on_click)
             buttons.append(btn)
-        
+
         else:
             for label in options:
                 btn = Button(description=label)
+
                 def on_click(label, btn):
                     add_annotation(label)
+
                 btn.on_click(functools.partial(on_click, label))
                 buttons.append(btn)
 
@@ -114,8 +121,10 @@ def annotate(examples,
             slider = cls(min=min_val, max=max_val, step=step_val)
         display(slider)
         btn = Button(description='submit')
+
         def on_click(btn):
             add_annotation(slider.value)
+
         btn.on_click(on_click)
         buttons.append(btn)
 
@@ -123,8 +132,10 @@ def annotate(examples,
         ta = Textarea()
         display(ta)
         btn = Button(description='submit')
+
         def on_click(btn):
             add_annotation(ta.value)
+
         btn.on_click(on_click)
         buttons.append(btn)
 
@@ -133,10 +144,9 @@ def annotate(examples,
         btn.on_click(skip)
         buttons.append(btn)
 
-        if current_index > 0:
-            btn = Button(description='previous')
-            btn.on_click(previous)
-            buttons.append(btn)
+        btn = Button(description='previous')
+        btn.on_click(previous)
+        buttons.append(btn)
 
     box = HBox(buttons)
     display(box)
