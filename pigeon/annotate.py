@@ -59,6 +59,12 @@ def annotate(examples,
     def skip(btn):
         show_next()
 
+    def previous(btn):
+        nonlocal current_index
+        current_index -= 2
+        annotations.pop()
+        show_next()
+
     count_label = HTML()
     set_label_text()
     display(count_label)
@@ -126,6 +132,11 @@ def annotate(examples,
         btn = Button(description='skip')
         btn.on_click(skip)
         buttons.append(btn)
+
+        if current_index > 0:
+            btn = Button(description='previous')
+            btn.on_click(previous)
+            buttons.append(btn)
 
     box = HBox(buttons)
     display(box)
